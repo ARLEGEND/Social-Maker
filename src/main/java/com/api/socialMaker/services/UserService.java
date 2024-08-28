@@ -1,10 +1,12 @@
 package com.api.socialMaker.services;
 
+import com.api.socialMaker.dto.LoginRequest;
 import com.api.socialMaker.models.User;
 import com.api.socialMaker.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -23,8 +25,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+    public Optional<User> loginUser(LoginRequest loginRequest) {
+        Optional<User> userOpt = userRepository.findByEmail(loginRequest.getEmail());
 
+        if (userOpt.isPresent() && userOpt.get().getPassword().equals(loginRequest.getPassword())) {
+            return userOpt;
+        }
+
+        return Optional.empty();
+    }
 }
