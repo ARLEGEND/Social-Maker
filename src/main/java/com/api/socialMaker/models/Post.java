@@ -11,10 +11,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +28,13 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public Post(String content, User user) {
+        this.content = content;
+        this.user = user;
+        this.createdAt = LocalDateTime.now();
+    }
+
 
     @PrePersist
     protected void onCreate() {
