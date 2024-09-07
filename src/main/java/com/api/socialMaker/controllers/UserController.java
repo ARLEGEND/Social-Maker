@@ -1,6 +1,7 @@
 package com.api.socialMaker.controllers;
 
 import com.api.socialMaker.dto.LoginRequest;
+import com.api.socialMaker.dto.UserProfileUpdateRequest;
 import com.api.socialMaker.models.User;
 import com.api.socialMaker.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,14 @@ public class UserController {
         } else {
             return ResponseEntity.status(401).body("Giriş başarısız: Hatalı email veya şifre");
         }
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<String> updateUserProfile(
+            @PathVariable Long userId,
+            @RequestBody UserProfileUpdateRequest userProfileUpdateRequest
+            ) {
+        userService.updateUserProfile(userId, userProfileUpdateRequest);
+        return ResponseEntity.ok("Profil başarıyla güncellendi.");
     }
 }

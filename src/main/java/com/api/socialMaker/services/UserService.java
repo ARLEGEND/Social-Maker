@@ -1,10 +1,12 @@
 package com.api.socialMaker.services;
 
 import com.api.socialMaker.dto.LoginRequest;
+import com.api.socialMaker.dto.UserProfileUpdateRequest;
 import com.api.socialMaker.models.User;
 import com.api.socialMaker.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +39,16 @@ public class UserService {
         }
 
         return Optional.empty();
+    }
+
+    public void updateUserProfile(Long userId, UserProfileUpdateRequest userProfileUpdateRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id " + userId));
+        user.setFullName(userProfileUpdateRequest.getFullName());
+        user.setBio(userProfileUpdateRequest.getBio());
+        user.setProfilePictureUrl(userProfileUpdateRequest.getProfilePictureUrl());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
     }
 }
